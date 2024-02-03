@@ -11,6 +11,7 @@ import { UsersService } from './users.service';
 import { CreateUserDTO } from './users.dto';
 import { User } from '@prisma/client';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { Tracer } from 'src/decorators/trace.decorator';
 
 @ApiTags('Users Endpoints')
 @Controller('users')
@@ -26,7 +27,9 @@ export class UsersController {
 
   @Get(':id')
   @ApiParam({ name: 'id', type: 'string' })
+  @Tracer()
   async getUserById(@Param() params: { id: string }) {
+    await this.usersService.simulateRandomTimeoutAsync();
     return await this.usersService.getUserById(params);
   }
 

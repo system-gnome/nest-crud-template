@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { Tracer } from 'src/decorators/trace.decorator';
 import { PrismaService } from 'src/services/prisma.service';
 
 @Injectable()
@@ -10,6 +11,7 @@ export class UsersRepository {
     return await this.prisma.user.create({ data: payload });
   }
 
+  @Tracer()
   async getUserById(payload: { id: string }): Promise<User> {
     const user = await this.prisma.user.findFirst({
       where: {
